@@ -23,7 +23,6 @@ module AZBlob
     cache_control : String? = nil, content_disposition : String? = nil, content_encoding : String? = nil, content_language : String? = nil, content_type : String? = nil,
     blob_version : String? = nil, authorized_objid : String? = nil, unauthorized_objid : String? = nil, correlation_id : String? = nil, encryption_scope : String? = nil do
     # uses an account's SharedKeyCredential to sign this signature values to produce the proper SAS query parameters.
-    # ameba:disable Metrics/CyclomaticComplexity
     def sign_with_sharedkey(cred : SharedKeyCredential)
       resource = if snapshot_time
                    "bs"
@@ -61,7 +60,6 @@ module AZBlob
       build_params(resource, signature)
     end
 
-    # ameba:disable Metrics/CyclomaticComplexity
     private def build_params(resource, signature)
       param = URI::Params.new
       # Common SAS parameters

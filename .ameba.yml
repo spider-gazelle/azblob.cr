@@ -1,0 +1,8 @@
+Metrics/CyclomaticComplexity:
+  Description: Disallows methods with a cyclomatic complexity higher than `MaxComplexity`
+  MaxComplexity: 10
+  Excluded:
+    - src/azblob/client.cr
+    - src/azblob/sas/sas.cr
+  Enabled: true
+  Severity: Warning

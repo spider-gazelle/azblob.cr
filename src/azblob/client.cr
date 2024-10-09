@@ -95,7 +95,6 @@ module AZBlob
       upload(container, blob_name, contents, contents.size, options)
     end
 
-    # ameba:disable Metrics/CyclomaticComplexity
     def head_blob(container : String, blob_name : String, options : DownloadOptions = DownloadOptions.default) : Models::BlobProperties
       req = new_request("HEAD", "#{container}/#{URI.encode_path_segment(blob_name)}") do |args|
         args.query_params.add("snapshot", options.snapshot.to_s) if options.snapshot
