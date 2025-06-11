@@ -11,7 +11,7 @@ module AZBlob
 
     def blob_sas(container : String, blob : String, expiry = 10.minutes, permissions : BlobPermissions = BlobPermissions.read | BlobPermissions.list)
       params = SignatureValues.new(container: container, blob: blob, permissions: permissions, expiry: expiry).sign_with_sharedkey(@cred)
-      "#{config.endpoint}#{container}/#{URI.encode_path_segment(blob)}?#{params}"
+      "#{config.endpoint}#{container}/#{encode_path(blob)}?#{params}"
     end
   end
 
