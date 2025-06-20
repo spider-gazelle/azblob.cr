@@ -38,7 +38,7 @@ module AZBlob
 
     # ameba:disable Metrics/CyclomaticComplexity
     private def do_download(container, blob_name, options)
-      new_request("GET", "#{container}/#{encode_path(blob_name)}") do |args|
+      new_request("GET", "#{container}/#{URI.encode_path_segment(blob_name)}") do |args|
         args.query_params.add("snapshot", options.snapshot.to_s) if options.snapshot
         args.query_params.add("versionid", options.version_id.to_s) if options.version_id
         range = options.range.format

@@ -14,7 +14,7 @@ module AZBlob
           options.block_size = DefaultDownloadBlockSize if options.block_size < DefaultDownloadBlockSize
         end
       end
-      resource = "#{container}/#{encode_path(blob_name)}"
+      resource = "#{container}/#{URI.encode_path_segment(blob_name)}"
 
       return do_upload(resource, size, io, options) if size <= MaxUploadBlobBytes
 

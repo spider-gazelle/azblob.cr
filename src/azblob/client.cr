@@ -96,7 +96,7 @@ module AZBlob
     end
 
     def head_blob(container : String, blob_name : String, options : DownloadOptions = DownloadOptions.default) : Models::BlobProperties
-      req = new_request("HEAD", "#{container}/#{encode_path(blob_name)}") do |args|
+      req = new_request("HEAD", "#{container}/#{URI.encode_path_segment(blob_name)}") do |args|
         args.query_params.add("snapshot", options.snapshot.to_s) if options.snapshot
         args.query_params.add("versionid", options.version_id.to_s) if options.version_id
 
@@ -128,7 +128,7 @@ module AZBlob
     end
 
     def delete_blob(container : String, blob_name : String, options : Models::BlobDeleteOptions? = nil)
-      req = new_request("DELETE", "#{container}/#{encode_path(blob_name)}") do |args|
+      req = new_request("DELETE", "#{container}/#{URI.encode_path_segment(blob_name)}") do |args|
         if opts = options
           args.query_params.add("deletetype", opts.delete_type.to_s) if opts.delete_type
           args.query_params.add("snapshot", opts.snapshot.to_s) if opts.snapshot
@@ -144,18 +144,6 @@ module AZBlob
     # :nodoc
     def stats
       @pool.stats
-    end
-
-    def self.encode_path(path : String) : String
-      parts = Path.posix(path).parts
-      parts.shift if parts.first? == "/"
-      parts.map! { |part| URI.encode_path_segment(part) }
-      parts.join("/")
-    end
-
-    @[AlwaysInline]
-    def encode_path(path : String)
-      self.class.encode_path path
     end
 
     protected def pool
