@@ -191,7 +191,13 @@ module AZBlob
 
         args.headers.merge!(options.metadata.transform_keys { |k| "x-ms-meta-#{k}" })
         args.headers.add("x-ms-tags", options.tags_str) unless options.tags_str.empty?
-        args.body = IO::Memory.new(block_list_xml(block_ids))
+        # Content-Length must be set explicitly: the request is signed in a
+        # before_request hook, and an IO body without it is sent chunked, so the
+        # signature would be computed over an empty Content-Length while Azure
+        # computes it over the real length (403 AuthenticationFailed).
+        xml = block_list_xml(block_ids)
+        args.headers.add(HeaderContentLength, xml.bytesize.to_s)
+        args.body = IO::Memory.new(xml)
       end
       do_request(req, Models::BlockCommitResp)
     end
